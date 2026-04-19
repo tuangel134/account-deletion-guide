@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
     :root,[data-theme="light"]{--bg:#f7f6f2;--surface:#f9f8f5;--surface2:#fbfbf9;--offset:#f3f0ec;--border:#d4d1ca;--text:#28251d;--muted:#7a7974;--faint:#bab9b4;--inv:#f9f8f4;--primary:#01696f;--primary-h:#0c4e54;--error:#a12c7b;--error-bg:#e0ced7;--warn:#964219;--warn-bg:#ddcfc6;--ok:#437a22;--ok-bg:#d4dfcc;--sh1:0 1px 2px oklch(0.2 0.01 80/0.06);--sh2:0 4px 12px oklch(0.2 0.01 80/0.08);}
     [data-theme="dark"]{--bg:#171614;--surface:#1c1b19;--surface2:#201f1d;--offset:#1d1c1a;--border:#393836;--text:#cdccca;--muted:#797876;--faint:#5a5957;--inv:#2b2a28;--primary:#4f98a3;--primary-h:#227f8b;--error:#d163a7;--error-bg:#4c3d46;--warn:#bb653b;--warn-bg:#564942;--ok:#6daa45;--ok-bg:#3a4435;--sh1:0 1px 2px oklch(0 0 0/0.2);--sh2:0 4px 12px oklch(0 0 0/0.3);}
@@ -34,7 +35,6 @@
     .tag svg{width:14px;height:14px;}
     h1{font-size:clamp(1.5rem,1.2rem + 1.25vw,2.25rem);font-weight:700;letter-spacing:-.02em;margin-bottom:.75rem;}
     .desc{font-size:clamp(1rem,.95rem + .25vw,1.125rem);color:var(--muted);line-height:1.6;max-width:52ch;}
-    /* ---- APP CARDS: usando label+radio para maxima compatibilidad ---- */
     .app-sel{margin-bottom:1.5rem;}
     .app-sel-title{display:block;font-size:.875rem;font-weight:600;margin-bottom:.5rem;color:var(--text);}
     .app-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
@@ -49,17 +49,14 @@
     .chk svg{opacity:0;width:10px;height:10px;stroke:var(--inv);}
     .app-radio:checked + .app-label .chk{background:var(--primary);border-color:var(--primary);}
     .app-radio:checked + .app-label .chk svg{opacity:1;}
-    /* notice */
     .notice{padding:1rem;border-radius:12px;background:var(--warn-bg);border:1px solid oklch(from var(--warn) l c h/0.2);margin-bottom:1.5rem;display:flex;gap:.75rem;align-items:flex-start;}
     .notice svg{width:18px;height:18px;flex-shrink:0;color:var(--warn);margin-top:2px;}
     .notice p{font-size:.875rem;line-height:1.55;}
-    /* data list */
     .data-sec{margin-bottom:1.5rem;}
     .data-sec h3{font-size:.875rem;font-weight:700;margin-bottom:.75rem;}
     .dlist{list-style:none;display:flex;flex-direction:column;gap:.5rem;}
     .dlist li{display:flex;align-items:center;gap:.75rem;font-size:.875rem;color:var(--muted);padding:.75rem;border-radius:8px;background:var(--offset);}
     .dlist li svg{width:15px;height:15px;flex-shrink:0;color:var(--error);}
-    /* form */
     .fcard{background:var(--surface);border-radius:16px;border:1px solid oklch(from var(--text) l c h/0.08);padding:1.5rem;box-shadow:var(--sh1);margin-bottom:1rem;}
     .fg{margin-bottom:1.25rem;}
     .fg:last-child{margin-bottom:0;}
@@ -74,12 +71,20 @@
     .rg{display:flex;flex-direction:column;gap:.5rem;}
     .ro{display:flex;align-items:center;gap:.75rem;cursor:pointer;font-size:.875rem;}
     .ro input{accent-color:var(--primary);width:16px;height:16px;cursor:pointer;}
+    /* boton */
     .btn{width:100%;padding:.75rem 1.5rem;background:var(--primary);color:var(--inv);border-radius:8px;font-size:.875rem;font-weight:600;border:none;display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:44px;cursor:pointer;}
-    .btn:hover{background:var(--primary-h);}
-    .btn:active{transform:scale(.99);}
+    .btn:hover:not(:disabled){background:var(--primary-h);}
+    .btn:active:not(:disabled){transform:scale(.99);}
+    .btn:disabled{opacity:.6;cursor:not-allowed;}
     .btn svg{width:16px;height:16px;}
+    .spinner{width:16px;height:16px;border:2px solid oklch(from var(--inv) l c h/0.3);border-top-color:var(--inv);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+    @keyframes spin{to{transform:rotate(360deg);}}
     .ferr{font-size:.75rem;color:var(--error);margin-top:.25rem;display:none;}
     .ferr.show{display:block;}
+    /* banner de error de envio */
+    .send-err{display:none;padding:.75rem 1rem;background:var(--error-bg);border:1px solid oklch(from var(--error) l c h/0.25);border-radius:8px;font-size:.875rem;color:var(--text);margin-top:.75rem;text-align:center;}
+    .send-err.show{display:block;}
+    /* success */
     .succ{display:none;text-align:center;padding:3rem 1rem;}
     .succ.show{display:flex;flex-direction:column;align-items:center;gap:1rem;}
     .succ-ico{width:56px;height:56px;border-radius:9999px;background:var(--ok-bg);display:flex;align-items:center;justify-content:center;}
@@ -94,7 +99,7 @@
   <a href="#main" class="skip">Ir al contenido principal</a>
   <header>
     <div class="brand">
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Velkion Studio">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-label="Velkion Studio">
         <rect width="28" height="28" rx="7" fill="currentColor" opacity="0.1"/>
         <path d="M6 8L11 20L14 13L17 20L22 8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
         <circle cx="14" cy="13" r="1.5" fill="currentColor"/>
@@ -123,7 +128,6 @@
           <p><strong>Esta acci&#243;n es irreversible.</strong> Una vez procesada tu solicitud, no podremos recuperar tu cuenta ni ning&#250;n dato asociado. El proceso puede tardar hasta <strong>30 d&#237;as h&#225;biles</strong>.</p>
         </div>
 
-        <!-- App selector usando input radio + label nativo — 100% clickeable -->
         <div class="app-sel">
           <span class="app-sel-title">Selecciona la aplicaci&#243;n <em style="color:var(--error);font-style:normal">*</em></span>
           <div class="app-grid">
@@ -193,11 +197,12 @@
             <label class="fl" for="nt">Comentarios adicionales <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
             <textarea id="nt" class="fi" rows="3" placeholder="Puedes agregar cualquier detalle adicional..." style="resize:vertical;min-height:80px;"></textarea>
           </div>
-          <button type="submit" class="btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>
+          <button type="submit" class="btn" id="sbtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
             Enviar solicitud de eliminaci&#243;n
           </button>
-          <p class="fhint" style="margin-top:.75rem;text-align:center;">Tu solicitud ser&#225; procesada por VelkionStudio@gmail.com en un plazo de 30 d&#237;as.</p>
+          <p id="send-err" class="send-err" role="alert">&#9888;&#65039; Hubo un error al enviar. Intenta de nuevo o escribe a VelkionStudio@gmail.com</p>
+          <p class="fhint" style="margin-top:.75rem;text-align:center;">Tu solicitud llegar&#225; directamente a VelkionStudio@gmail.com</p>
         </form>
       </div>
 
@@ -205,7 +210,7 @@
         <div class="succ-ico">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
-        <h2>Solicitud enviada</h2>
+        <h2>&#161;Solicitud enviada!</h2>
         <p id="sm">Tu solicitud ha sido recibida. Te contactaremos en un plazo de 30 d&#237;as h&#225;biles.</p>
       </div>
     </div>
@@ -216,6 +221,10 @@
   </footer>
 
   <script>
+  // EmailJS init
+  emailjs.init('7ze9TI3S2vmbi_AuM');
+
+  // Theme toggle
   (function(){
     var T=document.querySelector('[data-toggle]'),H=document.documentElement;
     var d=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
@@ -227,39 +236,55 @@
   })();
 
   function send(e){
-    e.preventDefault();var ok=true;
+    e.preventDefault();
+    var ok=true;
+    // validar app
     var appEl=document.querySelector('input[name="appsel"]:checked');
     if(!appEl){document.getElementById('ae').classList.add('show');ok=false;}
     else{document.getElementById('ae').classList.remove('show');}
+    // validar email
     var E=document.getElementById('em'),EE=document.getElementById('ee');
-    if(!E.value||!/^[^@]+@[^@]+\.[^@]+$/.test(E.value)){E.classList.add('bad');EE.classList.add('show');ok=false;}
+    if(!E.value||E.value.indexOf('@')<1){E.classList.add('bad');EE.classList.add('show');ok=false;}
     else{E.classList.remove('bad');EE.classList.remove('show');}
+    // validar nombre
     var U=document.getElementById('un'),UE=document.getElementById('ne');
     if(!U.value.trim()){U.classList.add('bad');UE.classList.add('show');ok=false;}
     else{U.classList.remove('bad');UE.classList.remove('show');}
     if(!ok)return;
+
     var app=appEl.value;
     var rv=document.querySelector('input[name="r"]:checked');
-    var r=rv?rv.value:'No especificado';
-    var n=document.getElementById('nt').value||'Sin comentarios';
+    var reason=rv?rv.value:'No especificado';
+    var notes=document.getElementById('nt').value||'Sin comentarios';
     var dt=new Date().toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric'});
-    var s=encodeURIComponent('[Eliminacion de Cuenta] '+app+' - '+U.value.trim());
-    var b=encodeURIComponent('SOLICITUD DE ELIMINACION DE CUENTA
-=====================================
 
-Aplicacion: '+app+'
-Nombre de usuario: '+U.value.trim()+'
-Correo registrado: '+E.value+'
-Motivo: '+r+'
-Comentarios: '+n+'
+    // Mostrar spinner
+    var btn=document.getElementById('sbtn');
+    btn.disabled=true;
+    btn.innerHTML='<div class="spinner"></div> Enviando...';
+    document.getElementById('send-err').classList.remove('show');
 
-Fecha: '+dt);
-    window.location.href='mailto:VelkionStudio@gmail.com?subject='+s+'&body='+b;
-    setTimeout(function(){
+    emailjs.send('service_71mkhqr','template_63b54bb',{
+      title: '[Eliminacion de Cuenta] ' + app + ' - ' + U.value.trim(),
+      app: app,
+      name: U.value.trim(),
+      username: U.value.trim(),
+      email: E.value,
+      reason: reason,
+      notes: notes,
+      date: dt
+    }).then(function(){
+      // Exito
       document.getElementById('fs').style.display='none';
       var ss=document.getElementById('ss');ss.classList.add('show');
-      document.getElementById('sm').textContent='Tu solicitud de eliminación para '+app+' ha sido enviada. Te contactaremos al correo '+E.value+' en un plazo de 30 días hábiles.';
-    },800);
+      document.getElementById('sm').textContent='Tu solicitud de eliminación para '+app+' ha sido enviada correctamente. Te contactaremos al correo '+E.value+' en un plazo de 30 días hábiles.';
+    }, function(err){
+      // Error
+      btn.disabled=false;
+      btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Enviar solicitud de eliminación';
+      document.getElementById('send-err').classList.add('show');
+      console.error('EmailJS error:', err);
+    });
   }
   </script>
 </body>
