@@ -20,36 +20,35 @@
     a,button,input,select,textarea{transition:color 180ms,background 180ms,border-color 180ms,box-shadow 180ms;}
     :focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:6px;}
     @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
-    /* skip */
     .skip{position:absolute;top:-100%;left:1rem;padding:.5rem 1rem;background:var(--primary);color:var(--inv);border-radius:8px;font-size:.875rem;font-weight:600;text-decoration:none;z-index:100;}
     .skip:focus{top:1rem;}
-    /* header */
     header{border-bottom:1px solid oklch(from var(--text) l c h/0.08);background:var(--surface);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;box-shadow:var(--sh1);}
     .brand{display:flex;align-items:center;gap:.75rem;}
     .brand-name{font-size:.875rem;font-weight:700;letter-spacing:-.01em;}
     .toggle{width:36px;height:36px;border-radius:9999px;display:flex;align-items:center;justify-content:center;color:var(--muted);border:1px solid oklch(from var(--text) l c h/0.1);}
     .toggle:hover{background:var(--offset);color:var(--text);}
-    /* main */
     main{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:clamp(2rem,6vw,4rem) 1rem;}
     .wrap{width:100%;max-width:560px;}
-    /* page header */
     .pg-head{margin-bottom:2rem;}
-    .tag{display:inline-flex;align-items:center;gap:.5rem;font-size:clamp(.75rem,.7rem + .25vw,.875rem);font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem;}
+    .tag{display:inline-flex;align-items:center;gap:.5rem;font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem;}
     .tag svg{width:14px;height:14px;}
     h1{font-size:clamp(1.5rem,1.2rem + 1.25vw,2.25rem);font-weight:700;letter-spacing:-.02em;margin-bottom:.75rem;}
     .desc{font-size:clamp(1rem,.95rem + .25vw,1.125rem);color:var(--muted);line-height:1.6;max-width:52ch;}
-    /* app cards */
+    /* ---- APP CARDS: usando label+radio para maxima compatibilidad ---- */
     .app-sel{margin-bottom:1.5rem;}
-    .app-sel > label{display:block;font-size:.875rem;font-weight:600;margin-bottom:.5rem;}
+    .app-sel-title{display:block;font-size:.875rem;font-weight:600;margin-bottom:.5rem;color:var(--text);}
     .app-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
-    .app-card{padding:1rem;border-radius:12px;border:2px solid var(--border);background:var(--surface);cursor:pointer;text-align:left;}
-    .app-card:hover{border-color:var(--primary);background:var(--surface2);}
-    .app-card.sel{border-color:var(--primary);background:color-mix(in oklch,var(--primary) 5%,var(--surface));}
-    .card-row{display:flex;align-items:center;justify-content:space-between;width:100%;}
-    .card-name{font-size:.875rem;font-weight:700;}
-    .card-sub{font-size:.75rem;color:var(--muted);}
-    .chk{width:18px;height:18px;border-radius:9999px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--inv);background:transparent;transition:all 180ms;}
-    .app-card.sel .chk{background:var(--primary);border-color:var(--primary);}
+    .app-radio{display:none;}
+    .app-label{display:block;padding:1rem;border-radius:12px;border:2px solid var(--border);background:var(--surface);cursor:pointer;user-select:none;transition:border-color 180ms,background 180ms;}
+    .app-label:hover{border-color:var(--primary);background:var(--surface2);}
+    .app-radio:checked + .app-label{border-color:var(--primary);background:color-mix(in oklch,var(--primary) 6%,var(--surface));}
+    .card-row{display:flex;align-items:center;justify-content:space-between;gap:.5rem;}
+    .card-name{font-size:.875rem;font-weight:700;color:var(--text);}
+    .card-sub{font-size:.75rem;color:var(--muted);margin-top:2px;}
+    .chk{width:18px;height:18px;border-radius:9999px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 180ms;}
+    .chk svg{opacity:0;width:10px;height:10px;stroke:var(--inv);}
+    .app-radio:checked + .app-label .chk{background:var(--primary);border-color:var(--primary);}
+    .app-radio:checked + .app-label .chk svg{opacity:1;}
     /* notice */
     .notice{padding:1rem;border-radius:12px;background:var(--warn-bg);border:1px solid oklch(from var(--warn) l c h/0.2);margin-bottom:1.5rem;display:flex;gap:.75rem;align-items:flex-start;}
     .notice svg{width:18px;height:18px;flex-shrink:0;color:var(--warn);margin-top:2px;}
@@ -73,25 +72,20 @@
     .fi.bad{border-color:var(--error);}
     .fhint{font-size:.75rem;color:var(--muted);margin-top:.5rem;}
     .rg{display:flex;flex-direction:column;gap:.5rem;}
-    .ro{display:flex;align-items:center;gap:.75rem;cursor:pointer;}
+    .ro{display:flex;align-items:center;gap:.75rem;cursor:pointer;font-size:.875rem;}
     .ro input{accent-color:var(--primary);width:16px;height:16px;cursor:pointer;}
-    .ro span{font-size:.875rem;}
-    /* btn */
     .btn{width:100%;padding:.75rem 1.5rem;background:var(--primary);color:var(--inv);border-radius:8px;font-size:.875rem;font-weight:600;border:none;display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:44px;cursor:pointer;}
     .btn:hover{background:var(--primary-h);}
     .btn:active{transform:scale(.99);}
     .btn svg{width:16px;height:16px;}
-    /* errors */
     .ferr{font-size:.75rem;color:var(--error);margin-top:.25rem;display:none;}
     .ferr.show{display:block;}
-    /* success */
     .succ{display:none;text-align:center;padding:3rem 1rem;}
     .succ.show{display:flex;flex-direction:column;align-items:center;gap:1rem;}
     .succ-ico{width:56px;height:56px;border-radius:9999px;background:var(--ok-bg);display:flex;align-items:center;justify-content:center;}
     .succ-ico svg{width:28px;height:28px;color:var(--ok);}
     .succ h2{font-size:clamp(1.125rem,1rem + .75vw,1.5rem);font-weight:700;}
     .succ p{font-size:.875rem;color:var(--muted);max-width:38ch;}
-    /* footer */
     footer{border-top:1px solid oklch(from var(--text) l c h/0.08);padding:1rem 1.5rem;text-align:center;font-size:.75rem;color:var(--faint);}
     @media(max-width:480px){.app-grid{grid-template-columns:1fr;}.fcard{padding:1.25rem;}}
   </style>
@@ -129,21 +123,38 @@
           <p><strong>Esta acci&#243;n es irreversible.</strong> Una vez procesada tu solicitud, no podremos recuperar tu cuenta ni ning&#250;n dato asociado. El proceso puede tardar hasta <strong>30 d&#237;as h&#225;biles</strong>.</p>
         </div>
 
+        <!-- App selector usando input radio + label nativo — 100% clickeable -->
         <div class="app-sel">
-          <label id="al">Selecciona la aplicaci&#243;n <em aria-hidden="true">*</em></label>
-          <div class="app-grid" role="radiogroup" aria-labelledby="al">
-            <button class="app-card" role="radio" aria-checked="false" data-app="FoodtruckMX" onclick="pick(this)">
-              <div class="card-row">
-                <div><div class="card-name">&#x1F69A; FoodtruckMX</div><div class="card-sub">Gesti&#243;n de foodtrucks</div></div>
-                <div class="chk" aria-hidden="true"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-              </div>
-            </button>
-            <button class="app-card" role="radio" aria-checked="false" data-app="StockProMX" onclick="pick(this)">
-              <div class="card-row">
-                <div><div class="card-name">&#x1F4C8; StockProMX</div><div class="card-sub">Seguimiento de inversiones</div></div>
-                <div class="chk" aria-hidden="true"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-              </div>
-            </button>
+          <span class="app-sel-title">Selecciona la aplicaci&#243;n <em style="color:var(--error);font-style:normal">*</em></span>
+          <div class="app-grid">
+            <div>
+              <input type="radio" name="appsel" id="app-ftmx" class="app-radio" value="FoodtruckMX">
+              <label for="app-ftmx" class="app-label">
+                <div class="card-row">
+                  <div>
+                    <div class="card-name">&#x1F69A; FoodtruckMX</div>
+                    <div class="card-sub">Gesti&#243;n de foodtrucks</div>
+                  </div>
+                  <div class="chk" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                </div>
+              </label>
+            </div>
+            <div>
+              <input type="radio" name="appsel" id="app-spmx" class="app-radio" value="StockProMX">
+              <label for="app-spmx" class="app-label">
+                <div class="card-row">
+                  <div>
+                    <div class="card-name">&#x1F4C8; StockProMX</div>
+                    <div class="card-sub">Seguimiento de inversiones</div>
+                  </div>
+                  <div class="chk" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                </div>
+              </label>
+            </div>
           </div>
           <p id="ae" class="ferr" role="alert">Por favor selecciona una aplicaci&#243;n.</p>
         </div>
@@ -160,12 +171,12 @@
 
         <form id="frm" class="fcard" novalidate onsubmit="send(event)">
           <div class="fg">
-            <label class="fl" for="em">Correo electr&#243;nico registrado <em aria-hidden="true">*</em></label>
+            <label class="fl" for="em">Correo electr&#243;nico registrado <em>*</em></label>
             <input type="email" id="em" class="fi" placeholder="correo@ejemplo.com" autocomplete="email" required/>
             <p id="ee" class="ferr" role="alert">Ingresa un correo electr&#243;nico v&#225;lido.</p>
           </div>
           <div class="fg">
-            <label class="fl" for="un">Nombre de usuario en la app <em aria-hidden="true">*</em></label>
+            <label class="fl" for="un">Nombre de usuario en la app <em>*</em></label>
             <input type="text" id="un" class="fi" placeholder="Tu nombre de usuario" required/>
             <p id="ne" class="ferr" role="alert">Por favor ingresa tu nombre de usuario.</p>
           </div>
@@ -214,22 +225,20 @@
       ?'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
       :'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';}
   })();
-  var app='';
-  function pick(el){
-    document.querySelectorAll('.app-card').forEach(function(c){c.classList.remove('sel');c.setAttribute('aria-checked','false');});
-    el.classList.add('sel');el.setAttribute('aria-checked','true');
-    app=el.dataset.app;document.getElementById('ae').classList.remove('show');
-  }
+
   function send(e){
     e.preventDefault();var ok=true;
-    if(!app){document.getElementById('ae').classList.add('show');ok=false;}
+    var appEl=document.querySelector('input[name="appsel"]:checked');
+    if(!appEl){document.getElementById('ae').classList.add('show');ok=false;}
+    else{document.getElementById('ae').classList.remove('show');}
     var E=document.getElementById('em'),EE=document.getElementById('ee');
-    if(!E.value||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(E.value)){E.classList.add('bad');EE.classList.add('show');ok=false;}
+    if(!E.value||!/^[^@]+@[^@]+\.[^@]+$/.test(E.value)){E.classList.add('bad');EE.classList.add('show');ok=false;}
     else{E.classList.remove('bad');EE.classList.remove('show');}
     var U=document.getElementById('un'),UE=document.getElementById('ne');
     if(!U.value.trim()){U.classList.add('bad');UE.classList.add('show');ok=false;}
     else{U.classList.remove('bad');UE.classList.remove('show');}
     if(!ok)return;
+    var app=appEl.value;
     var rv=document.querySelector('input[name="r"]:checked');
     var r=rv?rv.value:'No especificado';
     var n=document.getElementById('nt').value||'Sin comentarios';
