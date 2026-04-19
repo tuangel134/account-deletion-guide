@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eliminacion de Cuenta - Velkion Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap" rel="stylesheet">
+  <style>
+    :root,[data-theme="light"]{--bg:#f7f6f2;--surface:#f9f8f5;--surface2:#fbfbf9;--offset:#f3f0ec;--border:#d4d1ca;--text:#28251d;--muted:#7a7974;--faint:#bab9b4;--inv:#f9f8f4;--primary:#01696f;--primary-h:#0c4e54;--error:#a12c7b;--error-bg:#e0ced7;--warn:#964219;--warn-bg:#ddcfc6;--ok:#437a22;--ok-bg:#d4dfcc;--sh1:0 1px 2px oklch(0.2 0.01 80/0.06);--sh2:0 4px 12px oklch(0.2 0.01 80/0.08);}
+    [data-theme="dark"]{--bg:#171614;--surface:#1c1b19;--surface2:#201f1d;--offset:#1d1c1a;--border:#393836;--text:#cdccca;--muted:#797876;--faint:#5a5957;--inv:#2b2a28;--primary:#4f98a3;--primary-h:#227f8b;--error:#d163a7;--error-bg:#4c3d46;--warn:#bb653b;--warn-bg:#564942;--ok:#6daa45;--ok-bg:#3a4435;--sh1:0 1px 2px oklch(0 0 0/0.2);--sh2:0 4px 12px oklch(0 0 0/0.3);}
+    @media(prefers-color-scheme:dark){:root:not([data-theme]){--bg:#171614;--surface:#1c1b19;--surface2:#201f1d;--offset:#1d1c1a;--border:#393836;--text:#cdccca;--muted:#797876;--faint:#5a5957;--inv:#2b2a28;--primary:#4f98a3;--primary-h:#227f8b;--error:#d163a7;--error-bg:#4c3d46;--warn:#bb653b;--warn-bg:#564942;--ok:#6daa45;--ok-bg:#3a4435;--sh1:0 1px 2px oklch(0 0 0/0.2);--sh2:0 4px 12px oklch(0 0 0/0.3);}}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth;}
+    body{min-height:100dvh;font-family:'Inter',system-ui,sans-serif;font-size:clamp(1rem,.95rem + .25vw,1.125rem);color:var(--text);background:var(--bg);display:flex;flex-direction:column;}
+    h1,h2,h3{line-height:1.15;}
+    input,button,select,textarea{font:inherit;color:inherit;}
+    button{cursor:pointer;background:none;border:none;}
+    a,button,input,select,textarea{transition:color 180ms,background 180ms,border-color 180ms,box-shadow 180ms;}
+    :focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:6px;}
+    @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
+    /* skip */
+    .skip{position:absolute;top:-100%;left:1rem;padding:.5rem 1rem;background:var(--primary);color:var(--inv);border-radius:8px;font-size:.875rem;font-weight:600;text-decoration:none;z-index:100;}
+    .skip:focus{top:1rem;}
+    /* header */
+    header{border-bottom:1px solid oklch(from var(--text) l c h/0.08);background:var(--surface);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;box-shadow:var(--sh1);}
+    .brand{display:flex;align-items:center;gap:.75rem;}
+    .brand-name{font-size:.875rem;font-weight:700;letter-spacing:-.01em;}
+    .toggle{width:36px;height:36px;border-radius:9999px;display:flex;align-items:center;justify-content:center;color:var(--muted);border:1px solid oklch(from var(--text) l c h/0.1);}
+    .toggle:hover{background:var(--offset);color:var(--text);}
+    /* main */
+    main{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:clamp(2rem,6vw,4rem) 1rem;}
+    .wrap{width:100%;max-width:560px;}
+    /* page header */
+    .pg-head{margin-bottom:2rem;}
+    .tag{display:inline-flex;align-items:center;gap:.5rem;font-size:clamp(.75rem,.7rem + .25vw,.875rem);font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem;}
+    .tag svg{width:14px;height:14px;}
+    h1{font-size:clamp(1.5rem,1.2rem + 1.25vw,2.25rem);font-weight:700;letter-spacing:-.02em;margin-bottom:.75rem;}
+    .desc{font-size:clamp(1rem,.95rem + .25vw,1.125rem);color:var(--muted);line-height:1.6;max-width:52ch;}
+    /* app cards */
+    .app-sel{margin-bottom:1.5rem;}
+    .app-sel > label{display:block;font-size:.875rem;font-weight:600;margin-bottom:.5rem;}
+    .app-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+    .app-card{padding:1rem;border-radius:12px;border:2px solid var(--border);background:var(--surface);cursor:pointer;text-align:left;}
+    .app-card:hover{border-color:var(--primary);background:var(--surface2);}
+    .app-card.sel{border-color:var(--primary);background:color-mix(in oklch,var(--primary) 5%,var(--surface));}
+    .card-row{display:flex;align-items:center;justify-content:space-between;width:100%;}
+    .card-name{font-size:.875rem;font-weight:700;}
+    .card-sub{font-size:.75rem;color:var(--muted);}
+    .chk{width:18px;height:18px;border-radius:9999px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--inv);background:transparent;transition:all 180ms;}
+    .app-card.sel .chk{background:var(--primary);border-color:var(--primary);}
+    /* notice */
+    .notice{padding:1rem;border-radius:12px;background:var(--warn-bg);border:1px solid oklch(from var(--warn) l c h/0.2);margin-bottom:1.5rem;display:flex;gap:.75rem;align-items:flex-start;}
+    .notice svg{width:18px;height:18px;flex-shrink:0;color:var(--warn);margin-top:2px;}
+    .notice p{font-size:.875rem;line-height:1.55;}
+    /* data list */
+    .data-sec{margin-bottom:1.5rem;}
+    .data-sec h3{font-size:.875rem;font-weight:700;margin-bottom:.75rem;}
+    .dlist{list-style:none;display:flex;flex-direction:column;gap:.5rem;}
+    .dlist li{display:flex;align-items:center;gap:.75rem;font-size:.875rem;color:var(--muted);padding:.75rem;border-radius:8px;background:var(--offset);}
+    .dlist li svg{width:15px;height:15px;flex-shrink:0;color:var(--error);}
+    /* form */
+    .fcard{background:var(--surface);border-radius:16px;border:1px solid oklch(from var(--text) l c h/0.08);padding:1.5rem;box-shadow:var(--sh1);margin-bottom:1rem;}
+    .fg{margin-bottom:1.25rem;}
+    .fg:last-child{margin-bottom:0;}
+    .fl{display:block;font-size:.875rem;font-weight:600;margin-bottom:.5rem;}
+    .fl em{color:var(--error);font-style:normal;margin-left:2px;}
+    .fi{width:100%;padding:.75rem 1rem;border:1px solid var(--border);border-radius:8px;background:var(--bg);font-size:clamp(1rem,.95rem + .25vw,1.125rem);line-height:1.5;}
+    .fi:hover{border-color:var(--muted);}
+    .fi:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in oklch,var(--primary) 20%,transparent);}
+    .fi::placeholder{color:var(--faint);}
+    .fi.bad{border-color:var(--error);}
+    .fhint{font-size:.75rem;color:var(--muted);margin-top:.5rem;}
+    .rg{display:flex;flex-direction:column;gap:.5rem;}
+    .ro{display:flex;align-items:center;gap:.75rem;cursor:pointer;}
+    .ro input{accent-color:var(--primary);width:16px;height:16px;cursor:pointer;}
+    .ro span{font-size:.875rem;}
+    /* btn */
+    .btn{width:100%;padding:.75rem 1.5rem;background:var(--primary);color:var(--inv);border-radius:8px;font-size:.875rem;font-weight:600;border:none;display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:44px;cursor:pointer;}
+    .btn:hover{background:var(--primary-h);}
+    .btn:active{transform:scale(.99);}
+    .btn svg{width:16px;height:16px;}
+    /* errors */
+    .ferr{font-size:.75rem;color:var(--error);margin-top:.25rem;display:none;}
+    .ferr.show{display:block;}
+    /* success */
+    .succ{display:none;text-align:center;padding:3rem 1rem;}
+    .succ.show{display:flex;flex-direction:column;align-items:center;gap:1rem;}
+    .succ-ico{width:56px;height:56px;border-radius:9999px;background:var(--ok-bg);display:flex;align-items:center;justify-content:center;}
+    .succ-ico svg{width:28px;height:28px;color:var(--ok);}
+    .succ h2{font-size:clamp(1.125rem,1rem + .75vw,1.5rem);font-weight:700;}
+    .succ p{font-size:.875rem;color:var(--muted);max-width:38ch;}
+    /* footer */
+    footer{border-top:1px solid oklch(from var(--text) l c h/0.08);padding:1rem 1.5rem;text-align:center;font-size:.75rem;color:var(--faint);}
+    @media(max-width:480px){.app-grid{grid-template-columns:1fr;}.fcard{padding:1.25rem;}}
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip">Ir al contenido principal</a>
+  <header>
+    <div class="brand">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Velkion Studio">
+        <rect width="28" height="28" rx="7" fill="currentColor" opacity="0.1"/>
+        <path d="M6 8L11 20L14 13L17 20L22 8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="14" cy="13" r="1.5" fill="currentColor"/>
+      </svg>
+      <span class="brand-name">Velkion Studio</span>
+    </div>
+    <button class="toggle" data-toggle aria-label="Cambiar tema" title="Cambiar tema">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </header>
+
+  <main id="main">
+    <div class="wrap">
+      <div id="fs">
+        <div class="pg-head">
+          <div class="tag">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            Eliminaci&#243;n de cuenta
+          </div>
+          <h1>Solicitar eliminaci&#243;n<br>de cuenta y datos</h1>
+          <p class="desc">Puedes solicitar que tu cuenta y todos los datos asociados sean eliminados de nuestros servidores de forma permanente.</p>
+        </div>
+
+        <div class="notice" role="note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <p><strong>Esta acci&#243;n es irreversible.</strong> Una vez procesada tu solicitud, no podremos recuperar tu cuenta ni ning&#250;n dato asociado. El proceso puede tardar hasta <strong>30 d&#237;as h&#225;biles</strong>.</p>
+        </div>
+
+        <div class="app-sel">
+          <label id="al">Selecciona la aplicaci&#243;n <em aria-hidden="true">*</em></label>
+          <div class="app-grid" role="radiogroup" aria-labelledby="al">
+            <button class="app-card" role="radio" aria-checked="false" data-app="FoodtruckMX" onclick="pick(this)">
+              <div class="card-row">
+                <div><div class="card-name">&#x1F69A; FoodtruckMX</div><div class="card-sub">Gesti&#243;n de foodtrucks</div></div>
+                <div class="chk" aria-hidden="true"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+              </div>
+            </button>
+            <button class="app-card" role="radio" aria-checked="false" data-app="StockProMX" onclick="pick(this)">
+              <div class="card-row">
+                <div><div class="card-name">&#x1F4C8; StockProMX</div><div class="card-sub">Seguimiento de inversiones</div></div>
+                <div class="chk" aria-hidden="true"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+              </div>
+            </button>
+          </div>
+          <p id="ae" class="ferr" role="alert">Por favor selecciona una aplicaci&#243;n.</p>
+        </div>
+
+        <div class="data-sec">
+          <h3>Datos que ser&#225;n eliminados</h3>
+          <ul class="dlist" role="list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Perfil de usuario y credenciales de acceso</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Historial de datos e informaci&#243;n registrada en la app</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Configuraciones y preferencias personalizadas</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 3.56 1.18h3a2 2 0 0 1 2 1.72 12.05 12.05 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.27a16 16 0 0 0 6 6l.86-.86a2 2 0 0 1 2.11-.45 12.05 12.05 0 0 0 2.81.7 2 2 0 0 1 1.72 2.03z"/></svg>Datos de contacto asociados a la cuenta</li>
+          </ul>
+        </div>
+
+        <form id="frm" class="fcard" novalidate onsubmit="send(event)">
+          <div class="fg">
+            <label class="fl" for="em">Correo electr&#243;nico registrado <em aria-hidden="true">*</em></label>
+            <input type="email" id="em" class="fi" placeholder="correo@ejemplo.com" autocomplete="email" required/>
+            <p id="ee" class="ferr" role="alert">Ingresa un correo electr&#243;nico v&#225;lido.</p>
+          </div>
+          <div class="fg">
+            <label class="fl" for="un">Nombre de usuario en la app <em aria-hidden="true">*</em></label>
+            <input type="text" id="un" class="fi" placeholder="Tu nombre de usuario" required/>
+            <p id="ne" class="ferr" role="alert">Por favor ingresa tu nombre de usuario.</p>
+          </div>
+          <div class="fg">
+            <label class="fl" id="rl">Motivo de la solicitud</label>
+            <div class="rg" role="radiogroup" aria-labelledby="rl">
+              <label class="ro"><input type="radio" name="r" value="Ya no uso la app" checked><span>Ya no uso la app</span></label>
+              <label class="ro"><input type="radio" name="r" value="Preocupaciones de privacidad"><span>Preocupaciones de privacidad</span></label>
+              <label class="ro"><input type="radio" name="r" value="Cambio a otra solucion"><span>Cambio a otra soluci&#243;n</span></label>
+              <label class="ro"><input type="radio" name="r" value="Otro"><span>Otro</span></label>
+            </div>
+          </div>
+          <div class="fg">
+            <label class="fl" for="nt">Comentarios adicionales <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
+            <textarea id="nt" class="fi" rows="3" placeholder="Puedes agregar cualquier detalle adicional..." style="resize:vertical;min-height:80px;"></textarea>
+          </div>
+          <button type="submit" class="btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>
+            Enviar solicitud de eliminaci&#243;n
+          </button>
+          <p class="fhint" style="margin-top:.75rem;text-align:center;">Tu solicitud ser&#225; procesada por VelkionStudio@gmail.com en un plazo de 30 d&#237;as.</p>
+        </form>
+      </div>
+
+      <div id="ss" class="succ" role="status" aria-live="polite">
+        <div class="succ-ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h2>Solicitud enviada</h2>
+        <p id="sm">Tu solicitud ha sido recibida. Te contactaremos en un plazo de 30 d&#237;as h&#225;biles.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&#169; 2026 Velkion Studio &middot; <a href="mailto:VelkionStudio@gmail.com" style="color:var(--muted)">VelkionStudio@gmail.com</a></p>
+  </footer>
+
+  <script>
+  (function(){
+    var T=document.querySelector('[data-toggle]'),H=document.documentElement;
+    var d=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
+    H.setAttribute('data-theme',d);ic(d);
+    if(T)T.addEventListener('click',function(){d=d==='dark'?'light':'dark';H.setAttribute('data-theme',d);ic(d);});
+    function ic(t){if(!T)return;T.innerHTML=t==='dark'
+      ?'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
+      :'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';}
+  })();
+  var app='';
+  function pick(el){
+    document.querySelectorAll('.app-card').forEach(function(c){c.classList.remove('sel');c.setAttribute('aria-checked','false');});
+    el.classList.add('sel');el.setAttribute('aria-checked','true');
+    app=el.dataset.app;document.getElementById('ae').classList.remove('show');
+  }
+  function send(e){
+    e.preventDefault();var ok=true;
+    if(!app){document.getElementById('ae').classList.add('show');ok=false;}
+    var E=document.getElementById('em'),EE=document.getElementById('ee');
+    if(!E.value||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(E.value)){E.classList.add('bad');EE.classList.add('show');ok=false;}
+    else{E.classList.remove('bad');EE.classList.remove('show');}
+    var U=document.getElementById('un'),UE=document.getElementById('ne');
+    if(!U.value.trim()){U.classList.add('bad');UE.classList.add('show');ok=false;}
+    else{U.classList.remove('bad');UE.classList.remove('show');}
+    if(!ok)return;
+    var rv=document.querySelector('input[name="r"]:checked');
+    var r=rv?rv.value:'No especificado';
+    var n=document.getElementById('nt').value||'Sin comentarios';
+    var dt=new Date().toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric'});
+    var s=encodeURIComponent('[Eliminacion de Cuenta] '+app+' - '+U.value.trim());
+    var b=encodeURIComponent('SOLICITUD DE ELIMINACION DE CUENTA
+=====================================
+
+Aplicacion: '+app+'
+Nombre de usuario: '+U.value.trim()+'
+Correo registrado: '+E.value+'
+Motivo: '+r+'
+Comentarios: '+n+'
+
+Fecha: '+dt);
+    window.location.href='mailto:VelkionStudio@gmail.com?subject='+s+'&body='+b;
+    setTimeout(function(){
+      document.getElementById('fs').style.display='none';
+      var ss=document.getElementById('ss');ss.classList.add('show');
+      document.getElementById('sm').textContent='Tu solicitud de eliminación para '+app+' ha sido enviada. Te contactaremos al correo '+E.value+' en un plazo de 30 días hábiles.';
+    },800);
+  }
+  </script>
+</body>
+</html>
